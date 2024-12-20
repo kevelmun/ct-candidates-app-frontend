@@ -1,85 +1,63 @@
+# Sistema de Reserva de Tickets
 
-# 🎨 Ticket Reservation System - Frontend
+Este proyecto constituye el sistema completo de reserva de tickets, incluyendo tanto el backend como el frontend, listos para ser desplegados y utilizados. El sistema está diseñado para ejecutarse de manera integrada utilizando **Docker Compose**, lo que facilita la gestión de dependencias y el despliegue en múltiples entornos.
 
-This is the frontend service for the Ticket Reservation System, designed to provide an intuitive interface for users to view events and reserve tickets.
+---
 
-## 📜 Project Overview
+## **Inicio del Sistema Completo**
 
-The frontend allows users to:
-- 👀 View available events
-- 🔍 Filter events by date, location, and ticket availability
-- 🎟️ Reserve tickets for selected events
-- ✅ Confirm their reservations
+Para ejecutar el sistema en su totalidad, incluyendo el backend y el frontend, asegúrate de tener configuradas las variables de entorno y los archivos necesarios. Usa los siguientes comandos:
 
-The frontend is built using modern JavaScript frameworks such as [React.js](https://reactjs.org/) or [Vue.js](https://vuejs.org/) and is fully dockerized for easy deployment.
-
-## ⚙️ Requirements
-
-- Node.js
-- Docker
-- Docker Compose
-
-## 🚀 Setup
-
-### 1. 📂 Clone the Repository
-
+### **Comando Principal**:
+Ejecuta este comando para iniciar tanto el backend como el frontend desde cero:
 ```bash
-git clone https://github.com/codediaz/ct-candidates-app-frontend.git
-cd ct-candidates-app-frontend
+docker compose up --build
 ```
 
-### 2. 🔧 Environment Variables
-
-Create a `.env` file in the frontend root directory to configure environment variables such as the backend API URL.
-
-Example `.env` file:
-
-```
-REACT_APP_API_URL=http://localhost:3000
-PORT=3001
-```
-
-### 3. 🐳 Docker Setup
-
-Ensure Docker and Docker Compose are installed on your machine. Build and start the frontend container using the following command:
-
+### **Resolución de Problemas**:
+Si encuentras inconvenientes al iniciar los contenedores, utiliza estos comandos para garantizar una configuración limpia:
 ```bash
-docker-compose up --build
+docker compose --env-file ./backend/.env down -v
+docker compose --env-file ./backend/.env up --build
 ```
 
-This will start the frontend service and link it to the backend as defined in Docker Compose.
+Estos pasos eliminarán los volúmenes existentes y recrearán los contenedores, asegurando que todo funcione correctamente.
 
-### 4. 💻 Access the Application
+---
 
-Once the containers are running, access the application in your web browser at:
+## **Resumen del Sistema**
 
+El sistema incluye las siguientes funcionalidades:
+
+### **Backend**
+- **Autenticación**:
+  - Registro e inicio de sesión con generación de tokens JWT.
+- **Gestión de eventos**:
+  - Crear, consultar, actualizar y eliminar eventos (CRUD completo).
+- **Reservaciones**:
+  - Realizar y consultar reservaciones asociadas a usuarios autenticados.
+- **Middleware**:
+  - `verifyToken`: Autenticidad del token JWT.
+  - `isAdmin`: Permisos de administrador.
+
+### **Frontend**
+- **Interfaz amigable** desarrollada con **Next.js** y **Tailwind CSS**.
+- **Autenticación**: Registro e inicio de sesión.
+- **Eventos**:
+  - Lista, detalles y reserva de eventos.
+  - Filtros por criterios como fecha, ubicación y disponibilidad.
+- **Administración**:
+  - Gestión completa de eventos para usuarios con permisos de administrador.
+
+---
+
+## **Notas Adicionales**
+- Asegúrate de que Docker esté en funcionamiento y que las configuraciones de los archivos `.env` sean correctas antes de ejecutar los comandos.
+- Asegúrate de tener clonado tanto el frontend como el backend con la siguiendo extructura de carpetas:
 ```
-http://localhost:3001
+   your_path/
+   │
+   ├── backend/
+   ├── db/ 
+   ├── frontend/
 ```
-
-## 🛠️ Usage
-
-The frontend interacts with the backend API to fetch event data and handle ticket reservations. Ensure the backend service is running to experience the full functionality.
-
-## 🤝 Contribution
-
-### Pull Request Guidelines for Candidates
-
-If you are a candidate completing this technical test, please ensure your Pull Request (PR) includes:
-1. A clear title summarizing the changes (e.g., "Implement event filtering and reservation functionality").
-2. A detailed description covering:
-   - The purpose of the PR.
-   - The main changes introduced, including any UI components or interactions added.
-   - Any new dependencies or setup steps.
-   - Instructions for testing your implementation, if applicable.
-3. Ensure that your code follows best practices, with clean and commented code.
-
-Follow the [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/) model.
-
-## 📄 License
-
-This project is licensed under the MIT License. See the `LICENSE` file for details.
-
-## 📬 Contact
-
-For any inquiries, please reach out to [Sergio Díaz](mailto:sergio.diaz@funiber.org).
