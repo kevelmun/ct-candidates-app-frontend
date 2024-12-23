@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import API_BASE_URL from "../../utils/apiConfig";
 import EventCard from "@/components/EventCardProps";
-
+import Link from "next/link";
 
 interface Event {
   id: string;
@@ -18,7 +18,11 @@ interface Event {
 export default function EventsPage() {
   const [events, setEvents] = useState<Event[]>([]);
   const [filteredEvents, setFilteredEvents] = useState<Event[]>([]);
-  const [filters, setFilters] = useState({ date: "", location: "", minTickets: "" });
+  const [filters, setFilters] = useState({
+    date: "",
+    location: "",
+    minTickets: "",
+  });
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -52,25 +56,25 @@ export default function EventsPage() {
   const applyFilters = () => {
     let filtered = events;
 
-    // Filtrar por fecha
     if (filters.date) {
       filtered = filtered.filter(
         (event) => new Date(event.date).toLocaleDateString() === filters.date
       );
     }
 
-    // Filtrar por ubicación
     if (filters.location) {
       filtered = filtered.filter((event) =>
         event.location.toLowerCase().includes(filters.location.toLowerCase())
       );
     }
 
-    // Filtrar por tickets disponibles
     if (filters.minTickets) {
-      filtered = filtered.filter(
-        (event) => event.available_tickets >= parseInt(filters.minTickets, 10)
-      );
+      const minTickets = parseInt(filters.minTickets, 10);
+      if (!isNaN(minTickets)) {
+        filtered = filtered.filter(
+          (event) => event.available_tickets >= minTickets
+        );
+      }
     }
 
     setFilteredEvents(filtered);
@@ -78,16 +82,16 @@ export default function EventsPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Filter Events</h1>
+      <h1 className="text-3xl font-bold mb-6 text-white">Filter Events</h1>
 
       {/* Filtro */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-4 gap-4 mb-6 text-gray-400">
         <input
           type="date"
           name="date"
           value={filters.date}
           onChange={handleFilterChange}
-          className="px-4 py-2 rounded border-gray-300"
+          className="px-4 py-2 rounded border border-gray-300"
           placeholder="Select Date"
         />
         <input
@@ -95,7 +99,7 @@ export default function EventsPage() {
           name="location"
           value={filters.location}
           onChange={handleFilterChange}
-          className="px-4 py-2 rounded border-gray-300"
+          className="px-4 py-2 rounded border border-gray-300"
           placeholder="Enter Location"
         />
         <input
@@ -103,12 +107,12 @@ export default function EventsPage() {
           name="minTickets"
           value={filters.minTickets}
           onChange={handleFilterChange}
-          className="px-4 py-2 rounded border-gray-300"
+          className="px-4 py-2 rounded border border-gray-300"
           placeholder="Minimum Tickets"
         />
         <button
           onClick={applyFilters}
-          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="px-4 py-2 bg-blue-700 text-white rounded hover:bg-blue-800"
         >
           Apply Filters
         </button>
@@ -118,22 +122,23 @@ export default function EventsPage() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {filteredEvents.length > 0 ? (
           filteredEvents.map((event) => (
-            
-            <EventCard
-              key={event.id}
-              event={{
-                id: event.id,
-                name: event.name,
-                description: event.description,
-                date: event.date,
-                location: event.location,
-                total_tickets: event.total_tickets,
-                available_tickets: event.available_tickets,
-              }}
-            />
+            <Link key={event.id} href={`/principal/events/${event.id}`}>
+              <EventCard
+                key={event.id}
+                event={{
+                  id: event.id,
+                  name: event.name,
+                  description: event.description,
+                  date: event.date,
+                  location: event.location,
+                  total_tickets: event.total_tickets,
+                  available_tickets: event.available_tickets,
+                }}
+              />
+            </Link>
           ))
         ) : (
-          <p className="text-center col-span-full">No events found.</p>
+          <p className="text-center col-span-full text-white">No events found.</p>
         )}
       </div>
     </div>

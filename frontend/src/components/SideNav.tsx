@@ -97,6 +97,21 @@ export default function SideNav() {
           />
           Events
         </Link>
+        <Link
+          href="/principal/reservations"
+          className={`px-4 py-2 rounded hover:bg-gray-700 flex items-center ${
+            pathname === "/principal/reservations" ? "bg-gray-700" : ""
+          }`}
+        >
+          <Image
+            src="/shopping_bag.svg"
+            alt="Reservations Icon"
+            width={24}
+            height={24}
+            className="mr-2"
+          />
+          Reservations
+        </Link>
         {is_admin && (
           <Link
             href="/principal/admin"
@@ -113,6 +128,7 @@ export default function SideNav() {
             />
             Admin
           </Link>
+          
         )}
       </nav>
       <button

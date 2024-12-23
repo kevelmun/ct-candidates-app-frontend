@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import API_BASE_URL from "../../../utils/apiConfig";
 
 interface Event {
+  id: string;
   name: string;
   description: string;
   date: string;
@@ -59,8 +60,8 @@ export default function EventDetailPage() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
         body: JSON.stringify({
-          event_id: id, // ID del evento
-          tickets, // Cantidad de tickets a reservar
+          event_id: id, 
+          tickets, 
         }),
       });
 
@@ -90,53 +91,62 @@ export default function EventDetailPage() {
   }
 
   return (
-    <div className="p-8 bg-white rounded-lg shadow-lg max-w-2xl mx-auto">
-      <h1 className="text-4xl font-extrabold mb-6 text-purple-700">{event.name}</h1>
-      <p className="text-lg text-gray-800 mb-4">{event.description}</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-gray-700 mb-6">
-        <p className="flex items-center">
-          <span className="font-semibold">📅 Date:</span>&nbsp;
-          {new Date(event.date).toLocaleDateString()}
-        </p>
-        <p className="flex items-center">
-          <span className="font-semibold">📍 Location:</span>&nbsp;
-          {event.location}
-        </p>
-        <p className="flex items-center">
-          <span className="font-semibold">🎟️ Total Tickets:</span>&nbsp;
-          {event.total_tickets}
-        </p>
-        <p className="flex items-center">
-          <span className="font-semibold">✅ Available Tickets:</span>&nbsp;
-          {event.available_tickets}
-        </p>
-      </div>
-
-      <div className="flex items-center gap-4 mb-6">
-        <label htmlFor="tickets" className="font-semibold text-gray-800">
-          Tickets:
-        </label>
-        <input
-          type="number"
-          id="tickets"
-          value={tickets}
-          onChange={(e) => setTickets(Math.max(1, Math.min(event.available_tickets, Number(e.target.value))))}
-          className="w-20 px-2 py-1 border border-gray-300 rounded"
-          min="1"
-          max={event.available_tickets}
-        />
-      </div>
-
-      <button
-        onClick={handleReservation}
-        className="w-full px-4 py-2 bg-purple-600 text-white rounded hover:bg-purple-700 transition-colors"
-      >
-        Reserve Tickets
-      </button>
-
-      {message && (
-        <p className="mt-4 text-center text-gray-800 font-semibold">{message}</p>
-      )}
+    <div className="relative max-w-2xl mx-auto border-2 border-dashed rounded-lg border-gray-400 bg-gradient-to-r from-slate-700 to-slate-900 shadow-md hover:shadow-xl p-8">
+    <h1 className="text-4xl font-extrabold mb-6 text-center text-white uppercase">
+      {event.name}
+    </h1>
+    <p className="text-lg text-gray-200 mb-4 italic text-center">
+      "{event.description}"
+    </p>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+      <p className="flex items-center text-gray-200">
+        <span className="font-semibold">📅 Date:</span>&nbsp;
+        {new Date(event.date).toLocaleDateString()}
+      </p>
+      <p className="flex items-center text-gray-200">
+        <span className="font-semibold">📍 Location:</span>&nbsp;
+        {event.location}
+      </p>
+      <p className="flex items-center text-gray-200">
+        <span className="font-semibold">🎟️ Total Tickets:</span>&nbsp;
+        {event.total_tickets}
+      </p>
+      <p className="flex items-center text-gray-200">
+        <span className="font-semibold">✅ Available Tickets:</span>&nbsp;
+        {event.available_tickets}
+      </p>
     </div>
+
+    <div className="flex items-center gap-4 mb-6">
+      <label htmlFor="tickets" className="font-semibold text-white">
+        Tickets:
+      </label>
+      <input
+        type="number"
+        id="tickets"
+        value={tickets}
+        onChange={(e) =>
+          setTickets(
+            Math.max(1, Math.min(event.available_tickets, Number(e.target.value)))
+          )
+        }
+        className="w-20 px-2 py-1 border border-gray-800 rounded bg-white text-black"
+        min="1"
+        max={event.available_tickets}
+      />
+    </div>
+
+    <button
+      onClick={handleReservation}
+      className="w-full px-4 py-2 bg-white text-black rounded hover:bg-red-500 hover:text-white transition-colors font-bold uppercase"
+    >
+      Book Tickets
+    </button>
+
+    {message && (
+      <p className="mt-4 text-center text-white font-semibold">{message}</p>
+    )}
+  </div>
+
   );
 }
